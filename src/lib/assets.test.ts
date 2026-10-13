@@ -54,7 +54,7 @@ describe('supplied artwork contract', () => {
   })
 
   it('has no placeholder plant, pot, face, or watering-can image left', () => {
-    const files = readdirSync(new URL('../../public/assets/plants/', import.meta.url), { recursive: true })
+    const files = readdirSync(new URL('../../public/assets/plants/', import.meta.url), { recursive: true, encoding: 'utf8' })
     expect(files.some((file) => file.endsWith('.svg'))).toBe(false)
     for (const path of ['objects/watering-can.svg', 'objects/pot-terracotta.svg', 'effects/smile.svg']) {
       expect(existsSync(new URL(`../../public/assets/${path}`, import.meta.url))).toBe(false)

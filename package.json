@@ -6,10 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "dev:cloudflare": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy",
     "lint": "oxlint",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "preview:cloudflare": "npm run build && wrangler preview"
   },
   "dependencies": {
     "@fontsource/gaegu": "^5.3.0",
@@ -25,6 +28,7 @@
     "oxlint": "^1.81.0",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",
-    "vitest": "^4.0.0"
+    "vitest": "^4.0.0",
+    "wrangler": "4.148.0"
   }
 }

@@ -33,7 +33,7 @@ function plantFootprint(plant: GardenPlant, size: GardenSize): Footprint {
   }
 }
 
-function chooseColumns(count: number, available: GardenSize, footprint: Footprint, compact: boolean) {
+function chooseColumns(count: number, available: GardenSize, footprint: Pick<Footprint, 'width' | 'height'>, compact: boolean) {
   if (count <= 3) return count
   const maxColumns = Math.min(count, compact ? 4 : 8)
   const gapX = compact ? 12 : 24

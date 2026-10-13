@@ -13,6 +13,28 @@ npm install
 npm run dev
 ```
 
+## Deploy to Cloudflare Workers
+
+This Vite SPA deploys with [Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/).
+
+```sh
+npm run build
+npm run deploy
+```
+
+To test the production build locally in the Workers runtime:
+
+```sh
+npm run dev:cloudflare
+```
+
+For Cloudflare Workers Builds, use:
+
+- Build command: `npm run build`
+- Deploy command: `npx wrangler deploy`
+- Preview command: `npx wrangler preview`
+- Root directory: `/`
+
 Open the local URL printed by Vite. For a production preview, run `npm run build` and then `npm run preview`.
 
 ## A little tending
