@@ -1,4 +1,4 @@
-.app { max-width: 1480px; min-height: 100svh; padding: 0 56px; margin: 0 auto; display: flex; flex-direction: column; overflow: clip; }
+.app { max-width: 1480px; min-height: 100svh; padding: 0 56px; margin: 0 auto; display: flex; flex-direction: column; }
 .app-header { height: 112px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-shrink: 0; }
 .brand { display: flex; align-items: center; gap: 11px; font: 31px/1 var(--font-app); letter-spacing: .2px; }
 .brand-mark { transform: rotate(-7deg); color: #607852; }

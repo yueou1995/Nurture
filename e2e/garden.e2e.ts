@@ -301,13 +301,26 @@ test('already-watered plants can queue from the menu and be watered again from h
   await expect(page.locator('[data-plant-id="self-care"]')).toHaveAttribute('data-watered', 'true')
 })
 
-test('menus stay within the viewport for plants at every garden corner', async ({ page }, info) => {
+test('plants and menus stay visible at every garden corner', async ({ page }, info) => {
+  if (info.project.name === 'desktop') {
+    await page.setViewportSize({ width: 3440, height: 1440 })
+  }
   await page.goto('/')
   for (const position of [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 1 }]) {
     const garden = createGarden('2026-10-09')
     garden.plants[0].position = position
+    garden.plants[0].habitName = 'A long habit name using two full lines'
     await page.evaluate(({ storageKey, garden }) => localStorage.setItem(storageKey, JSON.stringify(garden)), { storageKey: key, garden })
     await page.reload()
+    const stageBox = (await page.locator('.garden-stage').boundingBox())!
+    const plant = page.locator('[data-plant-id="self-care"]')
+    const artBox = (await plant.locator('.plant-art').boundingBox())!
+    const labelBox = (await plant.locator('.plant-label').boundingBox())!
+    expect(Math.min(artBox.x, labelBox.x)).toBeGreaterThanOrEqual(stageBox.x + 7)
+    expect(Math.max(artBox.x + artBox.width, labelBox.x + labelBox.width))
+      .toBeLessThanOrEqual(stageBox.x + stageBox.width - 7)
+    expect(artBox.y).toBeGreaterThanOrEqual(stageBox.y + 7)
+    expect(labelBox.y + labelBox.height).toBeLessThanOrEqual(stageBox.y + stageBox.height - 7)
     const menu = await openPlantMenu(page, 'self-care', info.project.name === 'touch')
     const box = (await menu.boundingBox())!
     const viewport = page.viewportSize()!
@@ -578,4 +591,6 @@ test('an intentionally empty garden stays empty after refresh, without celebrati
   await page.getByRole('button', { name: 'Read', exact: true }).click()
   await page.getByRole('button', { name: 'Plant it', exact: true }).click()
   await expect(page.locator('.plant-node')).toHaveCount(1)
+  const saved = await page.evaluate((storageKey) => JSON.parse(localStorage.getItem(storageKey)!), key)
+  expect(saved.plants[0].position).toEqual({ x: 0.5, y: 0.42 })
 })

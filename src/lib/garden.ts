@@ -118,22 +118,32 @@ export function habitName(value: string): string {
 }
 
 export function findOpenPosition(plants: GardenPlant[]): Point {
-  if (plants.length === 0) return { x: 0.49, y: 0.4 }
-  let best = { x: 0.5, y: 0.5 }
-  let largestGap = -1
-  for (let i = 0; i < 64; i++) {
-    const candidate = {
-      x: 0.06 + ((i * 0.61803398875) % 1) * 0.88,
-      y: 0.08 + ((i * 0.41421356237) % 1) * 0.83,
-    }
-    const gap = Math.min(...plants.map(({ position }) =>
-      Math.hypot((candidate.x - position.x) * 0.8, candidate.y - position.y)))
-    if (gap > largestGap) {
-      best = candidate
-      largestGap = gap
-    }
+  const center = { x: 0.5, y: 0.42 }
+  if (plants.length === 0) return center
+  const candidates = [
+    center,
+    ...Array.from({ length: 96 }, (_, index) => ({
+      x: 0.14 + ((index * 0.61803398875) % 1) * 0.72,
+      y: 0.13 + ((index * 0.41421356237) % 1) * 0.67,
+    })),
+  ]
+  const placements = candidates.map((candidate, index) => ({
+    candidate,
+    index,
+    gap: Math.min(...plants.map(({ position }) =>
+      Math.hypot((candidate.x - position.x) * 0.8, candidate.y - position.y))),
+    centerDistance: Math.hypot((candidate.x - center.x) * 0.8, candidate.y - center.y),
+  }))
+  const clear = placements.filter(({ gap }) => gap >= 0.24)
+  if (clear.length > 0) {
+    clear.sort((a, b) => a.centerDistance - b.centerDistance || b.gap - a.gap || a.index - b.index)
+    return clear[0].candidate
   }
-  return best
+  return placements.reduce((best, placement) => {
+    const score = placement.gap - placement.centerDistance * 0.25
+    const bestScore = best.gap - best.centerDistance * 0.25
+    return score > bestScore ? placement : best
+  }).candidate
 }
 
 export function monthDays(year: number, month: number) {

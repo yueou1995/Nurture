@@ -38,25 +38,40 @@ export function gardenMetrics(size: GardenSize) {
   const plantWidth = compact ? 126 : 176
   const plantHeight = plantWidth * PLANT_ART_SIZE.height / PLANT_ART_SIZE.width + 40
   const canWidth = compact ? 51 : 100
+  const edgeGap = 8
+  const labelWidth = plantWidth + 34
   return {
     plantWidth, plantHeight, canWidth,
-    marginX: compact ? 48 : plantWidth / 2 + 12,
-    marginTop: plantHeight / 2 + 8,
-    marginBottom: compact ? 42 : 48,
+    marginX: Math.ceil(labelWidth / 2 + edgeGap),
+    marginTop: plantHeight / 2 + edgeGap,
     canScale: canWidth / wateringCanArtwork.frame.width,
   }
 }
 
-export function plantPoint(position: Point, size: GardenSize): Point {
-  const { marginX, marginTop, marginBottom } = gardenMetrics(size)
+export function plantMargins(plant: GardenPlant, size: GardenSize) {
+  const { plantWidth, plantHeight, marginX, marginTop } = gardenMetrics(size)
+  const artwork = plantArtwork[plant.plantType]
+  const artHeight = (artwork.height - artwork.contentFrame.y) * plantWidth / artwork.width
+  const labelHeight = 2 * (size.width < 600 ? 18 : 22) * 1.1
+  // Mirrors the shadow, label gap, and two-line label below the trimmed artwork.
+  const visualBottom = -plantHeight / 2 + artHeight + 10 + labelHeight
+  return {
+    marginX,
+    marginTop,
+    marginBottom: Math.ceil(visualBottom + 8),
+  }
+}
+
+export function plantPoint(position: Point, size: GardenSize, plant: GardenPlant): Point {
+  const { marginX, marginTop, marginBottom } = plantMargins(plant, size)
   return {
     x: marginX + position.x * Math.max(1, size.width - marginX * 2),
     y: marginTop + position.y * Math.max(1, size.height - marginTop - marginBottom),
   }
 }
 
-export function normalizedPosition(point: Point, size: GardenSize): Point {
-  const { marginX, marginTop, marginBottom } = gardenMetrics(size)
+export function normalizedPosition(point: Point, size: GardenSize, plant: GardenPlant): Point {
+  const { marginX, marginTop, marginBottom } = plantMargins(plant, size)
   return {
     x: clamp((point.x - marginX) / Math.max(1, size.width - marginX * 2)),
     y: clamp((point.y - marginTop) / Math.max(1, size.height - marginTop - marginBottom)),
@@ -64,7 +79,7 @@ export function normalizedPosition(point: Point, size: GardenSize): Point {
 }
 
 export function soilPoint(plant: GardenPlant, size: GardenSize): Point {
-  const center = plantPoint(plant.position, size)
+  const center = plantPoint(plant.position, size, plant)
   const { plantWidth, plantHeight } = gardenMetrics(size)
   const artwork = plantArtwork[plant.plantType]
   const scale = plantWidth / artwork.width

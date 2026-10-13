@@ -87,15 +87,23 @@ describe('a gentle, persistent garden', () => {
     expect(() => habitName('a'.repeat(41))).toThrow('40')
   })
 
-  it('makes room for a new plant without using an existing position', () => {
+  it('places a new plant in clear space near the middle of the garden', () => {
     const garden = createGarden(day)
     const point = findOpenPosition(garden.plants)
-    expect(point.x).toBeGreaterThanOrEqual(0)
-    expect(point.x).toBeLessThanOrEqual(1)
-    expect(point.y).toBeGreaterThanOrEqual(0)
-    expect(point.y).toBeLessThanOrEqual(1)
+    expect(point).toEqual({ x: 0.5, y: 0.42 })
     expect(garden.plants.some((plant) => plant.position.x === point.x && plant.position.y === point.y)).toBe(false)
-    expect(findOpenPosition([])).toEqual({ x: 0.49, y: 0.4 })
+    expect(findOpenPosition([])).toEqual({ x: 0.5, y: 0.42 })
+
+    const occupiedCenter = [{ ...garden.plants[0], position: point }]
+    const nearbyOpenPoint = findOpenPosition(occupiedCenter)
+    expect(nearbyOpenPoint.x).toBeGreaterThanOrEqual(0.14)
+    expect(nearbyOpenPoint.x).toBeLessThanOrEqual(0.86)
+    expect(nearbyOpenPoint.y).toBeGreaterThanOrEqual(0.13)
+    expect(nearbyOpenPoint.y).toBeLessThanOrEqual(0.8)
+    expect(Math.hypot(
+      (nearbyOpenPoint.x - point.x) * 0.8,
+      nearbyOpenPoint.y - point.y,
+    )).toBeGreaterThanOrEqual(0.24)
   })
 })
 

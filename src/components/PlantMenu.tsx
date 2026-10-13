@@ -26,7 +26,7 @@ export function PlantMenu({ id, plant, day, pending, size, stage, trigger, onClo
   useLayoutEffect(() => {
     const element = menu.current!
     const bounds = stage.current!.getBoundingClientRect()
-    const center = plantPoint(plant.position, size)
+    const center = plantPoint(plant.position, size, plant)
     const { plantWidth, plantHeight } = gardenMetrics(size)
     const gap = size.width < 600 ? 4 : 12
     const width = element.offsetWidth
@@ -45,7 +45,7 @@ export function PlantMenu({ id, plant, day, pending, size, stage, trigger, onClo
     }
     element.style.left = `${clamp(x, minX, maxX)}px`
     element.style.top = `${clamp(y, minY, maxY)}px`
-  }, [plant.position, size, stage])
+  }, [plant, size, stage])
 
   useLayoutEffect(() => {
     menu.current?.querySelector<HTMLButtonElement>('button:not(:disabled)')?.focus({ preventScroll: true })

@@ -1,6 +1,6 @@
 import { plantArtwork } from './artwork'
 import type { GardenPlant, Point } from './garden'
-import { gardenMetrics, normalizedPosition, plantPoint, type GardenSize } from './watering'
+import { gardenMetrics, normalizedPosition, plantMargins, plantPoint, type GardenSize } from './watering'
 
 export interface TidyPlacement {
   id: string
@@ -123,6 +123,7 @@ export function tidyGardenPositions(plants: GardenPlant[], size: GardenSize): Ti
   }
   const compact = size.width < 600
   const footprints = plants.map((plant) => plantFootprint(plant, size))
+  const margins = plants.map((plant) => plantMargins(plant, size))
   const footprint = {
     width: Math.max(...footprints.map((item) => item.width)),
     height: Math.max(...footprints.map((item) => item.height)),
@@ -139,10 +140,10 @@ export function tidyGardenPositions(plants: GardenPlant[], size: GardenSize): Ti
   const naturalStart = edge + Math.max(0, (available.height - totalHeight) * 0.15)
   const firstLabelOffset = maxArtHeight + 10
   const lastLabelOffset = firstLabelOffset + (rows - 1) * (rowHeight + gapY)
-  const minimumLabelTop = Math.max(...footprints.map((item) =>
-    metrics.marginTop - metrics.plantHeight / 2 + item.artHeight + 10))
-  const maximumLabelTop = Math.min(...footprints.map((item) =>
-    size.height - metrics.marginBottom - metrics.plantHeight / 2 + item.artHeight + 10))
+  const minimumLabelTop = Math.max(...footprints.map((item, index) =>
+    margins[index].marginTop - metrics.plantHeight / 2 + item.artHeight + 10))
+  const maximumLabelTop = Math.min(...footprints.map((item, index) =>
+    size.height - margins[index].marginBottom - metrics.plantHeight / 2 + item.artHeight + 10))
   const startTop = Math.max(minimumLabelTop - firstLabelOffset,
     Math.min(naturalStart, maximumLabelTop - lastLabelOffset))
   const spacingX = columns === 1 ? 0 :
@@ -157,7 +158,7 @@ export function tidyGardenPositions(plants: GardenPlant[], size: GardenSize): Ti
       labelTop,
     }))
   }).flat()
-  const current = plants.map((plant) => plantPoint(plant.position, size))
+  const current = plants.map((plant) => plantPoint(plant.position, size, plant))
   const cost = plants.map((_, plantIndex) => slots.map((slot) => {
     const centerY = slot.labelTop + metrics.plantHeight / 2 - footprints[plantIndex].artHeight - 10
     const dx = (current[plantIndex].x - slot.x) / size.width
@@ -172,6 +173,6 @@ export function tidyGardenPositions(plants: GardenPlant[], size: GardenSize): Ti
       x: slot.x,
       y: slot.labelTop + metrics.plantHeight / 2 - footprints[index].artHeight - 10,
     }
-    return { id: plant.id, position: normalizedPosition(point, size) }
+    return { id: plant.id, position: normalizedPosition(point, size, plant) }
   })
 }

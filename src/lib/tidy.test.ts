@@ -48,7 +48,7 @@ describe('tidy garden layout', () => {
       const plant = input.find((item) => item.id === id)!
       const artwork = plantArtwork[plant.plantType]
       const artHeight = (artwork.height - artwork.contentFrame.y) * metrics.plantWidth / artwork.width
-      return plantPoint(position, desktop).y - metrics.plantHeight / 2 + artHeight + 10
+      return plantPoint(position, desktop, plant).y - metrics.plantHeight / 2 + artHeight + 10
     })
     expect(Math.max(...labelTops) - Math.min(...labelTops)).toBeLessThan(0.001)
     expect((Math.min(...placements.map(({ position }) => position.x)) +
@@ -76,7 +76,7 @@ describe('tidy garden layout', () => {
       const plant = input.find((item) => item.id === id)!
       const artwork = plantArtwork[plant.plantType]
       const artHeight = (artwork.height - artwork.contentFrame.y) * metrics.plantWidth / artwork.width
-      return plantPoint(position, mobile).y - metrics.plantHeight / 2 + artHeight + 10
+      return plantPoint(position, mobile, plant).y - metrics.plantHeight / 2 + artHeight + 10
     })
     const bottom = Math.max(...labelTops)
     const bottomRow = labelTops.filter((top) => bottom - top < 1)

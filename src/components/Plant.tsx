@@ -28,7 +28,7 @@ export function Plant({ plant, day, size, noticed, pouring, reacting, celebratin
   const [preview, setPreview] = useState<Point | null>(null)
   const drag = useRef<{ id: number; start: Point; origin: Point; position: Point; moved: boolean } | null>(null)
   const suppressClick = useRef(false)
-  const center = preview ?? plantPoint(plant.position, size)
+  const center = preview ?? plantPoint(plant.position, size, plant)
   const { plantWidth, plantHeight } = gardenMetrics(size)
   const happy = isWatered(plant, day)
   const style: PlantStyle = {
@@ -58,8 +58,8 @@ export function Plant({ plant, day, size, noticed, pouring, reacting, celebratin
     if (!current.moved && Math.hypot(dx, dy) < 7) return
     if (!current.moved) onMoveStart(plant.id)
     current.moved = true
-    current.position = normalizedPosition({ x: current.origin.x + dx, y: current.origin.y + dy }, size)
-    setPreview(plantPoint(current.position, size))
+    current.position = normalizedPosition({ x: current.origin.x + dx, y: current.origin.y + dy }, size, plant)
+    setPreview(plantPoint(current.position, size, plant))
   }
 
   function finishDrag(event: PointerEvent<HTMLButtonElement>, cancel = false) {

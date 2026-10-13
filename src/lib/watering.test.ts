@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { plantArtwork } from './artwork'
 import { careForPlant, createGarden, plantTypes } from './garden'
 import {
   canBounds, gardenMetrics, nextWatering, normalizedPosition, plantPoint, POUR_ANGLE,
@@ -14,10 +15,32 @@ describe.each([
   const metrics = gardenMetrics(size)
 
   it('preserves free plant arrangement and clamps positions inside the garden', () => {
-    expect(normalizedPosition(plantPoint(plant.position, size), size).x).toBeCloseTo(plant.position.x)
-    expect(normalizedPosition(plantPoint(plant.position, size), size).y).toBeCloseTo(plant.position.y)
-    expect(normalizedPosition({ x: -100, y: -100 }, size)).toEqual({ x: 0, y: 0 })
-    expect(normalizedPosition({ x: 2000, y: 2000 }, size)).toEqual({ x: 1, y: 1 })
+    expect(normalizedPosition(plantPoint(plant.position, size, plant), size, plant).x).toBeCloseTo(plant.position.x)
+    expect(normalizedPosition(plantPoint(plant.position, size, plant), size, plant).y).toBeCloseTo(plant.position.y)
+    expect(normalizedPosition({ x: -100, y: -100 }, size, plant)).toEqual({ x: 0, y: 0 })
+    expect(normalizedPosition({ x: 2000, y: 2000 }, size, plant)).toEqual({ x: 1, y: 1 })
+  })
+
+  it('keeps every rendered plant footprint inside all four garden edges', () => {
+    const compact = size.width < 600
+    const labelWidth = metrics.plantWidth + 34
+    const labelHeight = 2 * (compact ? 18 : 22) * 1.1
+    for (const plantType of plantTypes) {
+      const artwork = plantArtwork[plantType]
+      const artHeight = (artwork.height - artwork.contentFrame.y) * metrics.plantWidth / artwork.width
+      const visualBottom = -metrics.plantHeight / 2 + artHeight + 10 + labelHeight
+      const edgePlant = { ...plant, plantType, habitName: 'A long habit name using two full lines' }
+
+      for (const position of [
+        { x: 0, y: 0 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 1 },
+      ]) {
+        const point = plantPoint(position, size, edgePlant)
+        expect(point.x - labelWidth / 2).toBeGreaterThanOrEqual(8)
+        expect(point.x + labelWidth / 2).toBeLessThanOrEqual(size.width - 8)
+        expect(point.y - metrics.plantHeight / 2).toBeGreaterThanOrEqual(8)
+        expect(point.y + visualBottom).toBeLessThanOrEqual(size.height - 8)
+      }
+    }
   })
 
   it.each(plantTypes)('waters the illustrated soil of %s without clipping the can at either edge', (plantType) => {
