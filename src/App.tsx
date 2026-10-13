@@ -10,7 +10,7 @@ import { useGarden } from './hooks/useGarden'
 import { isWatered, localDay, type GardenPlant } from './lib/garden'
 import './App.css'
 
-type Sheet = { type: 'manager' | 'grow' } | { type: 'plant'; id: string; edit?: boolean; historyOnly?: boolean }
+type Sheet = { type: 'manager' } | { type: 'grow'; fromHome?: boolean } | { type: 'plant'; id: string; edit?: boolean; historyOnly?: boolean }
 
 export default function App() {
   const garden = useGarden()
@@ -92,7 +92,7 @@ export default function App() {
 
       <main id="garden-main" tabIndex={-1}>
         <div className="garden-intro">
-          <h1>Good things grow with a little care</h1>
+          <h1>Your habits are growing.</h1>
           <svg className="intro-sun" viewBox="0 0 64 64" aria-hidden="true"><path d="M43 28c4 11-1 20-12 20-12 0-19-9-14-20 5-13 22-13 26 0Z" /><path d="m31 8 1-5m17 13 5-4m0 21 6 1M46 51l4 5M29 56l-1 5M9 47l-5 3M7 29l-5-1m12-13-4-4" /></svg>
         </div>
         <Garden ref={canvas} plants={data.plants} day={day}
@@ -100,21 +100,23 @@ export default function App() {
           onTidyComplete={() => setTidyNotice(Date.now())}
           onOpen={(id) => open({ type: 'plant', id, historyOnly: true })}
           onEdit={(id) => open({ type: 'plant', id, edit: true })}
-          onRequestRemove={setHomeRemovalId} />
+          onRequestRemove={setHomeRemovalId}
+          onGrow={() => open({ type: 'grow', fromHome: true })} />
       </main>
 
       <div className={`celebration ${celebrating ? 'is-visible' : ''}`} role="status">
         {celebrating && <><Icon name="sprout" size={21} /><span>Your garden is happy today. <span className="little-heart">&#9825;</span></span></>}
       </div>
       {tidyNotice !== null && <div className="tidy-toast" key={tidyNotice} role="status" aria-live="polite">Garden tidied 🌱</div>}
-      {removedNotice !== null && sheet?.type !== 'manager' && <PlantRemovedToast key={removedNotice} onDismiss={() => setRemovedNotice(null)} />}
+      {removedNotice !== null && sheet?.type !== 'manager' && <PlantRemovedToast key={removedNotice} />}
 
       {sheet?.type === 'manager' && <GardenManager plants={data.plants} day={day} removedNotice={removedNotice} onClose={() => setSheet(null)}
         onOpen={(id) => setSheet({ type: 'plant', id })}
         onRemove={removePlant}
-        onGrow={() => setSheet({ type: 'grow' })}
-        onDismissRemoved={() => setRemovedNotice(null)} />}
-      {sheet?.type === 'grow' && <GrowPlant onClose={() => setSheet(null)} onBack={() => setSheet({ type: 'manager' })} onAdd={(name, type) => { garden.add(name, type); setSheet(null) }} />}
+        onGrow={() => setSheet({ type: 'grow' })} />}
+      {sheet?.type === 'grow' && <GrowPlant onClose={() => setSheet(null)}
+        onBack={sheet.fromHome ? undefined : () => setSheet({ type: 'manager' })}
+        onAdd={(name, type) => { garden.add(name, type); setSheet(null) }} />}
       {selected && <PlantDetail key={`${selected.id}-${sheet?.type === 'plant' && sheet.edit ? 'edit' : sheet?.type === 'plant' && sheet.historyOnly ? 'history-only' : 'detail'}`} plant={selected} day={day}
         initialEditing={sheet?.type === 'plant' && !!sheet.edit} historyOnly={sheet?.type === 'plant' && !!sheet.historyOnly}
         onClose={() => setSheet(null)} onBack={sheet?.type === 'plant' && (sheet.historyOnly || sheet.edit) ? undefined : () => setSheet({ type: 'manager' })} onRename={garden.rename}

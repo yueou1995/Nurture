@@ -27,12 +27,13 @@ interface GardenProps {
   onOpen: (id: string) => void
   onEdit: (id: string) => void
   onRequestRemove: (id: string) => void
+  onGrow: () => void
 }
 
 const TIDY_DURATION = 650
 const TIDY_STAGGER = 35
 
-export function Garden({ ref, plants, day, celebrating, onWater, onMove, onArrange, onTidyComplete, onOpen, onEdit, onRequestRemove }: GardenProps) {
+export function Garden({ ref, plants, day, celebrating, onWater, onMove, onArrange, onTidyComplete, onOpen, onEdit, onRequestRemove, onGrow }: GardenProps) {
   const stage = useRef<HTMLDivElement>(null)
   const menuTrigger = useRef<HTMLButtonElement>(null)
   const menuId = useId()
@@ -105,7 +106,7 @@ export function Garden({ ref, plants, day, celebrating, onWater, onMove, onArran
           <path className="butterfly-wing" d="M54 21C34-4 30 30 54 25c20 15 22-12 0-4Z" />
           <path d="m53 27 4-12m-1 2-3-6m4 5 4-3" />
         </svg>
-        {plants.length === 0 && <div className="empty-garden"><Icon name="sprout" size={42} /><h2>Room for something good.</h2><p>Every garden starts with a little seed.</p></div>}
+        {plants.length === 0 && <div className="empty-garden"><Icon name="sprout" size={42} /><h2>Every garden starts with a little seed,</h2><button className="primary-button empty-garden-action" onClick={onGrow}><Icon name="plus" size={18} />Grow Something New</button></div>}
         {size.width > 0 && plants.map((plant, index) => (
           <Plant key={plant.id} plant={plant} day={day} size={size}
             noticed={active?.plantId === plant.id} pouring={active?.plantId === plant.id && active.phase === 'pouring'}

@@ -68,18 +68,14 @@ main { flex: 1; min-height: 0; display: flex; flex-direction: column; outline: 0
 .soil-splash { fill: none; stroke: #87b5c3; stroke-width: 2.5; stroke-linecap: round; animation: splash .38s ease-out infinite alternate; }
 .empty-garden { position: absolute; inset: 20% 0 auto; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 15px; color: #839174; }
 .empty-garden h2 { font-size: 27px; color: var(--ink); }
-.empty-garden p { font-size: 13px; color: var(--muted); }
+.empty-garden-action { margin-top: 3px; }
 .garden-fireflies { position: absolute; inset: 0; pointer-events: none; z-index: 8; }
 .garden-fireflies i { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: #c6b979; animation: firefly 2s ease-in-out 2 both; }
 .garden-fireflies i::after { content: ''; position: absolute; width: 13px; height: 1px; top: 2px; left: -4px; background: #c6b979; transform: rotate(40deg); }
 .celebration { position: fixed; left: 50%; bottom: 38px; transform: translate(-50%, 15px); background: #eff1e5; border: 1px solid #d7ddc7; border-radius: 17px 19px 16px 20px; z-index: 30; display: flex; align-items: center; justify-content: center; gap: 11px; opacity: 0; pointer-events: none; color: #5c7450; white-space: nowrap; font: 23px var(--font-app); }
 .celebration.is-visible { padding: 14px 24px; animation: garden-message 5.2s ease both; }
 .little-heart { color: #bb907e; }
-.tidy-toast { position: fixed; z-index: 31; left: 50%; bottom: 34px; padding: 10px 17px; border: 1px solid #d7ddc7; border-radius: 14px 16px 13px 15px; background: #eff1e5; color: #5c7450; font-size: 16px; line-height: 1.2; white-space: nowrap; pointer-events: none; animation: tidy-toast 2.6s ease both; }
-.plant-removed-toast { position: fixed; z-index: 32; right: 32px; bottom: 34px; display: flex; align-items: center; gap: 8px; padding: 8px 8px 8px 14px; border: 1px solid #455e40; border-radius: 13px 15px 12px 14px; background: var(--green); color: #fbfaf2; box-shadow: 0 8px 25px rgb(52 63 45 / 16%); font-size: 15px; line-height: 1.2; white-space: nowrap; animation: plant-removed-toast 2.6s ease both; }
-.plant-removed-toast > svg { flex-shrink: 0; }
-.plant-removed-toast button { display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border-radius: 50%; background: transparent; color: inherit; opacity: .78; }
-.plant-removed-toast button:hover { background: rgb(255 255 255 / 10%); opacity: 1; }
+.tidy-toast, .plant-removed-toast { position: fixed; z-index: 31; left: 50%; bottom: 34px; padding: 10px 17px; border: 1px solid #d7ddc7; border-radius: 14px 16px 13px 15px; background: #eff1e5; color: #5c7450; font-size: 16px; line-height: 1.2; white-space: nowrap; pointer-events: none; animation: tidy-toast 2.6s ease both; }
 .storage-warning { display: flex; gap: 16px; justify-content: space-between; align-items: center; padding: 12px 17px; border: 1px solid #d9b594; background: #f5e8d8; border-radius: 12px; font-size: 12px; line-height: 1.6; }
 .storage-warning button { background: transparent; text-decoration: underline; white-space: nowrap; min-height: 44px; }
 
@@ -127,7 +123,7 @@ main { flex: 1; min-height: 0; display: flex; flex-direction: column; outline: 0
 .garden-list-row.is-swiping .garden-list-remove, .garden-list-row.is-revealed .garden-list-remove { visibility: visible; }
 .garden-list-row.is-revealed .garden-list-remove { pointer-events: auto; }
 .garden-list-item:focus-visible, .garden-list-remove:focus-visible { outline-offset: -3px; }
-.list-plant-art { width: 66px; flex-shrink: 0; }
+.list-plant-art { display: grid; place-items: center; align-self: stretch; width: 66px; flex-shrink: 0; }
 .list-plant-copy { flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .list-plant-copy strong { font-family: var(--font-app); font-size: 20px; font-weight: 400; line-height: 1.1; overflow-wrap: anywhere; }
 .list-plant-copy > span { color: #89917c; font-size: 11px; }
@@ -181,7 +177,6 @@ main { flex: 1; min-height: 0; display: flex; flex-direction: column; outline: 0
 @keyframes firefly { 0%,100% { opacity: 0; transform: translateY(8px) scale(.6); } 50% { opacity: .75; transform: translateY(-8px) scale(1); } }
 @keyframes garden-message { 0%,100% { opacity: 0; transform: translate(-50%,12px); } 12%,85% { opacity: 1; transform: translate(-50%,0); } }
 @keyframes tidy-toast { 0%,100% { opacity: 0; transform: translate(-50%,8px); } 12%,82% { opacity: 1; transform: translate(-50%,0); } }
-@keyframes plant-removed-toast { 0%,100% { opacity: 0; transform: translateY(8px); } 12%,82% { opacity: 1; transform: translateY(0); } }
 @keyframes sheet-in { from { opacity: .6; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
 @keyframes menu-in { from { opacity: 0; transform: translateY(4px) rotate(-.6deg); } to { opacity: 1; transform: translateY(0) rotate(0); } }
 @keyframes can-arrive {
@@ -228,8 +223,7 @@ main { flex: 1; min-height: 0; display: flex; flex-direction: column; outline: 0
   .sheet--grow .sheet-header h2 { font-size: 28px; }
   .celebration { bottom: 25px; font-size: 22px; max-width: calc(100% - 24px); }
   .celebration.is-visible { padding: 13px 18px; }
-  .tidy-toast { bottom: 25px; max-width: calc(100% - 24px); }
-  .plant-removed-toast { right: 12px; bottom: 25px; max-width: calc(100% - 24px); }
+  .tidy-toast, .plant-removed-toast { bottom: 25px; max-width: calc(100% - 24px); }
 }
 @media (max-width: 370px) {
   .app { padding: 0 12px; }
@@ -253,6 +247,5 @@ main { flex: 1; min-height: 0; display: flex; flex-direction: column; outline: 0
   .plant-node:hover .plant-art { transform: none !important; }
   .is-leaving .can-motion { opacity: 0; }
   .celebration.is-visible { animation: none; opacity: 1; transform: translate(-50%,0); }
-  .tidy-toast { animation: none; opacity: 1; transform: translate(-50%,0); }
-  .plant-removed-toast { animation: none; opacity: 1; transform: none; }
+  .tidy-toast, .plant-removed-toast { animation: none; opacity: 1; transform: translate(-50%,0); }
 }

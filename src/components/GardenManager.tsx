@@ -95,7 +95,7 @@ function GardenListItem({ plant, day, revealed, onReveal, onClose, onOpen, onReq
           if (revealed) onClose()
           else onOpen()
         }}>
-        <span className="list-plant-art"><PlantArt type={plant.plantType} happy={isWatered(plant, day)} /></span>
+        <span className="list-plant-art"><PlantArt type={plant.plantType} happy={isWatered(plant, day)} trimTop /></span>
         <span className="list-plant-copy"><strong>{plant.habitName}</strong><span>{isWatered(plant, day) ? 'Feeling cared for today' : "Here whenever you're ready"}</span></span>
         <Icon name="arrow" size={17} />
       </button>
@@ -112,7 +112,7 @@ function GardenListItem({ plant, day, revealed, onReveal, onClose, onOpen, onReq
   )
 }
 
-export function GardenManager({ plants, day, removedNotice, onClose, onOpen, onRemove, onGrow, onDismissRemoved }: {
+export function GardenManager({ plants, day, removedNotice, onClose, onOpen, onRemove, onGrow }: {
   plants: GardenPlant[]
   day: string
   removedNotice: number | null
@@ -120,7 +120,6 @@ export function GardenManager({ plants, day, removedNotice, onClose, onOpen, onR
   onOpen: (id: string) => void
   onRemove: (id: string) => void
   onGrow: () => void
-  onDismissRemoved: () => void
 }) {
   const [revealedId, setRevealedId] = useState<string | null>(null)
   const [removingPlant, setRemovingPlant] = useState<GardenPlant | null>(null)
@@ -128,7 +127,7 @@ export function GardenManager({ plants, day, removedNotice, onClose, onOpen, onR
   return (
     <>
       <Dialog title="My Garden" onClose={onClose}
-        overlay={removedNotice !== null ? <PlantRemovedToast key={removedNotice} onDismiss={onDismissRemoved} /> : undefined}>
+        overlay={removedNotice !== null ? <PlantRemovedToast key={removedNotice} /> : undefined}>
         <div className="garden-list">
           {plants.map((plant) => (
             <GardenListItem key={plant.id} plant={plant} day={day}

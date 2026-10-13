@@ -1,6 +1,6 @@
 # Nurture
 
-**Good things grow with a little care**
+**Your habits are growing.**
 
 A small, local-first React + TypeScript prototype: a paper-and-doodle garden for the things you want to nurture. No accounts, services, analytics, streaks, or backend.
 

@@ -6,7 +6,7 @@ import { PlantArt } from './PlantArt'
 
 export function GrowPlant({ onClose, onBack, onAdd }: {
   onClose: () => void
-  onBack: () => void
+  onBack?: () => void
   onAdd: (name: string, type: PlantType) => void
 }) {
   const [mode, setMode] = useState<'ideas' | 'custom'>('ideas')

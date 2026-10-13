@@ -50,8 +50,8 @@ test('a healthy garden starts without a draggable can or removed descriptions', 
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
   await page.goto('/')
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Good things grow with a little care')
-  await expect(page).toHaveTitle('Nurture - Good things grow with a little care')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your habits are growing.')
+  await expect(page).toHaveTitle('Nurture - Your habits are growing.')
   for (const description of [
     'Your garden, your pace.', 'Rooted here. Saved on this device.', 'A LITTLE CARE, EVERY DAY', 'pick me up',
     "Don't track your habits. Grow them.", 'a good day to grow',
@@ -570,11 +570,12 @@ test('an intentionally empty garden stays empty after refresh, without celebrati
   await page.evaluate(({ storageKey, garden }) => localStorage.setItem(storageKey, JSON.stringify(garden)), { storageKey: key, garden })
   await page.reload()
   await expect(page.locator('.plant-node')).toHaveCount(0)
-  await expect(page.getByRole('heading', { name: 'Room for something good.' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Every garden starts with a little seed,' })).toBeVisible()
   await expect(page.locator('.celebration')).toBeEmpty()
   await expect(page.locator('.watering-can')).toHaveCount(0)
-  await page.getByRole('button', { name: 'Grow something new', exact: true }).click()
+  await page.getByRole('button', { name: 'Grow Something New', exact: true }).click()
+  await expect(page.getByRole('dialog').locator('.text-back')).toHaveCount(0)
   await page.getByRole('button', { name: 'Read', exact: true }).click()
-  await page.getByRole('button', { name: 'Let it grow', exact: true }).click()
+  await page.getByRole('button', { name: 'Plant it', exact: true }).click()
   await expect(page.locator('.plant-node')).toHaveCount(1)
 })
