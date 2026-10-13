@@ -100,7 +100,7 @@ export function Garden({ ref, plants, day, celebrating, onWater, onMove, onArran
   return (
     <section className={`garden ${celebrating ? 'garden--happy' : ''}`} aria-label="Your little garden">
       <div className="garden-stage" ref={stage} data-testid="garden-stage">
-        <img className="garden-ground" src="/assets/objects/garden-ground.svg" alt="" draggable={false} />
+        <img className="garden-ground" src="assets/objects/garden-ground.svg" alt="" draggable={false} />
         <svg className="garden-butterfly" viewBox="0 0 80 80" aria-hidden="true">
           <path className="butterfly-trail" d="M5 70C40 65 2 42 23 38s23 4 27-12" />
           <path className="butterfly-wing" d="M54 21C34-4 30 30 54 25c20 15 22-12 0-4Z" />

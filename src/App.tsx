@@ -78,7 +78,7 @@ export default function App() {
     <div className="app">
       <a className="skip-link" href="#garden-main">Skip to your garden</a>
       <header className="app-header">
-        <a className="brand" href="/" aria-label="Nurture home"><span className="brand-mark"><Icon name="sprout" size={29} /></span><span>Nurture<span className="brand-period">.</span></span></a>
+        <a className="brand" href="./" aria-label="Nurture home"><span className="brand-mark"><Icon name="sprout" size={29} /></span><span>Nurture<span className="brand-period">.</span></span></a>
         <nav aria-label="Garden tools">
           <button className="garden-menu-button" onClick={() => open({ type: 'manager' })}>My Garden</button>
           <button className="icon-button tidy-button" aria-label="Tidy garden" data-tooltip="Tidy garden"

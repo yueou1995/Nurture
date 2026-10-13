@@ -29,8 +29,8 @@ function plantImage(
   soil: [number, number],
 ): PlantArtwork {
   return {
-    src: `/assets/plants/${prefix}-plain-transparent.png`,
-    happySrc: `/assets/plants/${prefix}-doodle-transparent.png`,
+    src: `assets/plants/${prefix}-plain-transparent.png`,
+    happySrc: `assets/plants/${prefix}-doodle-transparent.png`,
     width: 768,
     height: 768,
     frame: FULL_IMAGE_FRAME,
@@ -56,7 +56,7 @@ export const plantArtwork: Record<PlantType, PlantArtwork> = {
 }
 
 export const wateringCanArtwork: ImageArtwork & { pivot: Point; spout: Point } = {
-  src: '/assets/objects/watering-can-no-drops-transparent.png',
+  src: 'assets/objects/watering-can-no-drops-transparent.png',
   width: 768,
   height: 768,
   frame: { x: 228, y: 522, width: 311, height: 224 },
@@ -65,7 +65,7 @@ export const wateringCanArtwork: ImageArtwork & { pivot: Point; spout: Point } =
 }
 
 export const waterDropArtwork: ImageArtwork = {
-  src: '/assets/effects/water-drop-transparent.png',
+  src: 'assets/effects/water-drop-transparent.png',
   width: 768,
   height: 768,
   frame: { x: 170, y: 433, width: 30, height: 41 },

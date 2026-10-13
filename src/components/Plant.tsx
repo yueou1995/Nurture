@@ -131,7 +131,7 @@ export function Plant({ plant, day, size, noticed, pouring, reacting, celebratin
       <PlantArt type={plant.plantType} happy={happy} stage={plant.growthStage} trimTop />
       <span className="plant-ground-shadow" />
       <span className="plant-label">{plant.habitName}</span>
-      {reacting && <img className="plant-heart" src="/assets/effects/heart.svg" alt="" />}
+      {reacting && <img className="plant-heart" src="assets/effects/heart.svg" alt="" />}
       <svg className="notice-lines" viewBox="0 0 200 250" aria-hidden="true">
         <path d="m22 85-8-5m12-8-4-9m155 23 8-6m-12-6 4-9" />
       </svg>

@@ -5,11 +5,11 @@ import { fitArtwork, plantArtwork, PLANT_ART_SIZE, waterDropArtwork, wateringCan
 
 const imageFiles = [
   ...plantTypes.flatMap((type) => [plantArtwork[type].src, plantArtwork[type].happySrc]),
-  wateringCanArtwork.src, '/assets/objects/watering-can-plain-transparent.png', waterDropArtwork.src,
+  wateringCanArtwork.src, 'assets/objects/watering-can-plain-transparent.png', waterDropArtwork.src,
 ]
 
 function readAsset(src: string) {
-  return readFileSync(new URL(`../../public${src}`, import.meta.url))
+  return readFileSync(new URL(`../../public/${src}`, import.meta.url))
 }
 
 describe('supplied artwork contract', () => {

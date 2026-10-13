@@ -4,6 +4,17 @@
 
 A small, local-first React + TypeScript prototype: a paper-and-doodle garden for the things you want to nurture. No accounts, services, analytics, streaks, or backend.
 
+## Microsoft VibeHub
+
+Nurture is hosted at [vibehub.microsoft.com/app/yue-ou-uaco87/](https://vibehub.microsoft.com/app/yue-ou-uaco87/).
+
+The production build uses relative asset URLs so it works from VibeHub's `/app/<project-id>/` subpath. To prepare a new upload, build the app and ZIP the contents of `dist`:
+
+```sh
+npm run build
+(cd dist && zip -r ../nurture-vibehub.zip .)
+```
+
 ## Run
 
 Use Node.js 22.12+ (Node 24+ recommended).
